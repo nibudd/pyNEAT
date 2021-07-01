@@ -8,3 +8,6 @@ class NodeGene:
 
     def is_input(self) -> bool:
         return self.type.is_input()
+
+    def is_output(self) -> bool:
+        return self.type.is_output()

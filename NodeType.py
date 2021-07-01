@@ -8,3 +8,6 @@ class NodeType(Enum):
 
     def is_input(self):
         return (self == self.BIAS) or (self == self.INPUT)
+
+    def is_output(self):
+        return self == self.OUTPUT
