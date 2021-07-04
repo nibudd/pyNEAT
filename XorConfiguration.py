@@ -3,8 +3,9 @@ from Genotype import Genotype
 from NodeGene import NodeGene
 from NodeType import NodeType
 from PhenotypeUtility import construct_weights_matrix, construct_input_vector, extract_output_vector
-from NeuralNetworkRunner import run_neural_network
+from NeuralNetworkRunner import NeuralNetworkRunner
 from StandardConfig import *
+
 
 def get_starting_node_genes() -> list[NodeGene]:
     return [
@@ -14,7 +15,7 @@ def get_starting_node_genes() -> list[NodeGene]:
         NodeGene(NodeType.OUTPUT, 3)
     ]
 
-def evaluate_fitness(genotype: Genotype) -> float:
+def evaluate_fitness(genotype: Genotype, nn_runner: NeuralNetworkRunner) -> float:
     W = construct_weights_matrix(genotype)
     inputs = [
         np.array([[0, 0]]).T,
@@ -32,7 +33,7 @@ def evaluate_fitness(genotype: Genotype) -> float:
 
     for input in inputs:
         x = construct_input_vector(genotype.node_genes, input)
-        y = run_neural_network(W, x, transfer_function)
+        y = nn_runner.run(W, x)
         outputs.append(extract_output_vector(genotype.node_genes, y))
 
     error = 0

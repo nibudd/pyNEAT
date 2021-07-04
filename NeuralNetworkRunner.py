@@ -2,22 +2,27 @@ from collections import Callable
 
 import numpy as np
 
-def run_neural_network(weights: np.array, input: np.array, transfer_function: Callable[np.array, np.array]) -> np.array:
-    x = np.copy(input)
-    W = weights
-    max_iterations = 100
-    iteration_count = 0
+class NeuralNetworkRunner:
 
-    while iteration_count < max_iterations:
-        iteration_count += 1
+    def __init__(self, transfer_function: Callable[np.array, np.array]):
+        self.transfer_function = transfer_function
 
-        y = W @ x
-        y = transfer_function(y)
+    def run(self, weights: np.array, input: np.array) -> np.array:
+        x = np.copy(input)
+        W = weights
+        max_iterations = 100
+        iteration_count = 0
 
-        if np.equal(y, x).all():
-            y = x
-            break
+        while iteration_count < max_iterations:
+            iteration_count += 1
 
-        x = y
+            y = W @ x
+            y = self.transfer_function(y)
 
-    return y
+            if np.equal(y, x).all():
+                y = x
+                break
+
+            x = y
+
+        return y

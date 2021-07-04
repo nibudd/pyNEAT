@@ -1,7 +1,7 @@
 import numpy as np
 
 # general values
-population = 150
+population_size = 150
 transfer_function = lambda x: 1 / (1 + np.exp(-4.9 * x))
 
 # species values

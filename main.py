@@ -1,12 +1,16 @@
+from copy import deepcopy
 import numpy as np
 from Genotype import Genotype
 from PhenotypeUtility import construct_weights_matrix, construct_input_vector, extract_output_vector
-from NeuralNetworkRunner import run_neural_network
+from NeuralNetworkRunner import NeuralNetworkRunner
 import XorConfiguration as config
 
 
 def main():
     node_genes_0 = config.get_starting_node_genes()
+
+    population = [Genotype([], deepcopy(node_genes_0)) for i in range(config.population_size)]
+
 
     # calculate shared fitness of each individual
     # calculate total fitness of each species
