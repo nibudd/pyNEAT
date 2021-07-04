@@ -4,7 +4,7 @@ from NodeType import NodeType
 
 
 @pytest.mark.parametrize("node_type,expected", [
-    (NodeType.BIAS, True),
+    (NodeType.BIAS, False),
     (NodeType.HIDDEN, False),
     (NodeType.INPUT, True),
     (NodeType.OUTPUT, False)
@@ -24,3 +24,14 @@ def test_is_output(node_type: NodeType, expected: bool):
     node_gene = NodeGene(node_type, 0)
 
     assert expected == node_gene.is_output()
+
+@pytest.mark.parametrize("node_type,expected", [
+    (NodeType.BIAS, True),
+    (NodeType.HIDDEN, False),
+    (NodeType.INPUT, False),
+    (NodeType.OUTPUT, False)
+])
+def test_is_bias(node_type: NodeType, expected: bool):
+    node_gene = NodeGene(node_type, 0)
+
+    assert expected == node_gene.is_bias()

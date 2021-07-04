@@ -15,10 +15,12 @@ def construct_weights_matrix(genotype: Genotype) -> np.array:
 
 def construct_input_vector(node_genes: list[NodeGene], input: np.array) -> np.array:
     n = _get_number_of_nodes(node_genes)
+    input_ids = [node_gene.id for node_gene in node_genes if node_gene.is_input()]
+    bias_ids = [node_gene.id for node_gene in node_genes if node_gene.is_bias()]
 
     nn_input = np.zeros((n, 1))
-    rows = input.shape[0]
-    nn_input[:rows, :] = input
+    nn_input[input_ids, :] = input
+    nn_input[bias_ids, :] = 1
 
     return nn_input
 

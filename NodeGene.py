@@ -6,8 +6,11 @@ class NodeGene:
         self.type = node_type
         self.id = id
 
+    def is_bias(self) -> bool:
+        return self.type == NodeType.BIAS
+
     def is_input(self) -> bool:
-        return self.type.is_input()
+        return self.type == NodeType.INPUT
 
     def is_output(self) -> bool:
-        return self.type.is_output()
+        return self.type == NodeType.OUTPUT

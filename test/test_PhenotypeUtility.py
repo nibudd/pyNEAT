@@ -126,6 +126,20 @@ def test_constructInputVector():
 
     assert np.array_equal(expected, inputs)
 
+def test_constructInputVector_with_bias():
+    bias = NodeGene(NodeType.BIAS, 0)
+    input_1 = NodeGene(NodeType.INPUT, 1)
+    input_2 = NodeGene(NodeType.INPUT, 2)
+    output_1 = NodeGene(NodeType.OUTPUT, 3)
+    hidden_1 = NodeGene(NodeType.HIDDEN, 4)
+    node_genes = [bias, input_1, input_2, output_1, hidden_1]
+
+    inputs_only = np.array([[.1, .2]]).T
+    inputs = construct_input_vector(node_genes, inputs_only)
+    expected = np.array([[1, .1, .2, 0, 0]]).T
+
+    assert np.array_equal(expected, inputs)
+
 def test_extractOutputVector():
     input_1 = NodeGene(NodeType.INPUT, 0)
     input_2 = NodeGene(NodeType.INPUT, 1)

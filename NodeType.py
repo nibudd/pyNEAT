@@ -5,9 +5,3 @@ class NodeType(Enum):
     HIDDEN = auto()
     INPUT = auto()
     OUTPUT = auto()
-
-    def is_input(self):
-        return (self == self.BIAS) or (self == self.INPUT)
-
-    def is_output(self):
-        return self == self.OUTPUT
