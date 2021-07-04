@@ -1,21 +1,36 @@
 import numpy as np
+from NodeGene import NodeGene
+from EdgeGene import EdgeGene
 from Genotype import Genotype
 from NeuralNetwork import NeuralNetwork
 
 
 def realize_neural_network(genotype: Genotype) -> NeuralNetwork:
     weights = _get_weights_matrix(genotype)
-    max_iterations = len(genotype.edge_genes) # ToDo: look for a better way to limit iterations
-    outputs = _get_outputs_list(genotype)
+    outputs = _get_outputs_list(genotype.node_genes)
 
-    return NeuralNetwork(weights, max_iterations, outputs)
+    return NeuralNetwork(weights, outputs)
 
 
 def _get_weights_matrix(genotype: Genotype) -> np.array:
-    n = genotype.node_genes[-1].id + 1
+    n = _get_number_of_nodes(genotype.node_genes)
     weights = np.zeros((n, n))
 
-    for edge_gene in genotype.edge_genes:
+    weights = _add_edge_weights(genotype.edge_genes, weights)
+    weights = _add_input_memory(genotype.node_genes, weights)
+
+
+    return weights
+
+
+def _get_number_of_nodes(node_genes: list[NodeGene]) -> int:
+    id_offset_correction = 1 # since node numbers start at 0
+    nodes = node_genes[-1].id
+    return nodes + id_offset_correction
+
+
+def _add_edge_weights(edge_genes: EdgeGene, weights: np.array) -> np.array:
+    for edge_gene in edge_genes:
         if not edge_gene.enabled:
             continue
 
@@ -27,5 +42,12 @@ def _get_weights_matrix(genotype: Genotype) -> np.array:
 
     return weights
 
-def _get_outputs_list(genotype: Genotype) -> list[int]:
-    return [node_gene.id for node_gene in genotype.node_genes if node_gene.is_output()]
+def _add_input_memory(node_genes: list[NodeGene], weights: np.array) -> np.array:
+    input_gene_ids = [node_gene.id for node_gene in node_genes if node_gene.is_input()]
+    for input_gene_id in input_gene_ids:
+        weights[input_gene_id, input_gene_id] = 100
+
+    return weights
+
+def _get_outputs_list(node_genes: list[NodeGene]) -> list[int]:
+    return [node_gene.id for node_gene in node_genes if node_gene.is_output()]

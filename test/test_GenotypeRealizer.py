@@ -16,11 +16,10 @@ def test_realizeNeuralNetwork_1input_1output():
     genotype = Genotype(edge_genes, node_genes)
 
     neural_network = realize_neural_network(genotype)
-    expected = NeuralNetwork(np.array([[0, 0], [1.1, 0]]), len(edge_genes), [])
+    expected = NeuralNetwork(np.array([[100, 0], [1.1, 0]]), [])
 
     assert np.array_equal(expected.weights, neural_network.weights)
-    assert expected.max_iterations == neural_network.max_iterations
-    
+
 
 def test_realizeNeuralNetwork_2input_1output():
     node_0 = NodeGene(NodeType.INPUT, 0)
@@ -36,10 +35,9 @@ def test_realizeNeuralNetwork_2input_1output():
     genotype = Genotype(edge_genes, node_genes)
 
     neural_network = realize_neural_network(genotype)
-    expected = NeuralNetwork(np.array([[0, 0, 0], [0, 0, 0], [1, 2, 0]]), len(edge_genes), [])
+    expected = NeuralNetwork(np.array([[100, 0, 0], [0, 100, 0], [1, 2, 0]]), [])
 
     assert np.array_equal(expected.weights, neural_network.weights)
-    assert expected.max_iterations == neural_network.max_iterations
 
 def test_realizeNeuralNetwork_2input_1hidden_1output():
     input_1 = NodeGene(NodeType.INPUT, 0)
@@ -58,13 +56,12 @@ def test_realizeNeuralNetwork_2input_1hidden_1output():
     genotype = Genotype(edge_genes, node_genes)
 
     neural_network = realize_neural_network(genotype)
-    expected = NeuralNetwork(np.array([[0, 0, 0, 0],
-                                       [0, 0, 0, 0],
+    expected = NeuralNetwork(np.array([[100, 0, 0, 0],
+                                       [0, 100, 0, 0],
                                        [1, 2, 0, 4],
-                                       [3, 0, 0, 0]]), len(edge_genes), [])
+                                       [3, 0, 0, 0]]), [])
 
     assert np.array_equal(expected.weights, neural_network.weights)
-    assert expected.max_iterations == neural_network.max_iterations
 
 def test_realizeNeuralNetwork_2input_1hidden_1output_1loop():
     input_1 = NodeGene(NodeType.INPUT, 0)
@@ -84,13 +81,12 @@ def test_realizeNeuralNetwork_2input_1hidden_1output_1loop():
     genotype = Genotype(edge_genes, node_genes)
 
     neural_network = realize_neural_network(genotype)
-    expected = NeuralNetwork(np.array([[0, 0, 0, 0],
-                                       [0, 0, 0, 0],
+    expected = NeuralNetwork(np.array([[100, 0, 0, 0],
+                                       [0, 100, 0, 0],
                                        [1, 2, 0, 4],
-                                       [3, 0, 0, 5]]), len(edge_genes), [])
+                                       [3, 0, 0, 5]]), [])
 
     assert np.array_equal(expected.weights, neural_network.weights)
-    assert expected.max_iterations == neural_network.max_iterations
 
 def test_realizeNeuralNetwork_2input_1hidden_1output_1loop_1disabled():
     input_1 = NodeGene(NodeType.INPUT, 0)
@@ -110,11 +106,10 @@ def test_realizeNeuralNetwork_2input_1hidden_1output_1loop_1disabled():
     genotype = Genotype(edge_genes, node_genes)
 
     neural_network = realize_neural_network(genotype)
-    expected = NeuralNetwork(np.array([[0, 0, 0, 0],
-                                       [0, 0, 0, 0],
+    expected = NeuralNetwork(np.array([[100, 0, 0, 0],
+                                       [0, 100, 0, 0],
                                        [0, 2, 0, 4],
-                                       [3, 0, 0, 5]]), len(edge_genes), [])
+                                       [3, 0, 0, 5]]), [])
 
     assert np.array_equal(expected.weights, neural_network.weights)
-    assert expected.max_iterations == neural_network.max_iterations
 
