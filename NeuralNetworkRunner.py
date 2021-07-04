@@ -1,9 +1,8 @@
 import numpy as np
-from NeuralNetwork import NeuralNetwork
 
-def run_neural_network(neural_network: NeuralNetwork, input: np.array) -> np.array:
+def run_neural_network(weights: np.array, input: np.array) -> np.array:
     x = np.copy(input)
-    W = neural_network.weights
+    W = weights
     max_iterations = 100
     iteration_count = 0
 
@@ -19,4 +18,4 @@ def run_neural_network(neural_network: NeuralNetwork, input: np.array) -> np.arr
 
         x = y
 
-    return y[neural_network.outputs, :]
+    return y
