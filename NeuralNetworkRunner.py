@@ -1,6 +1,8 @@
+from collections import Callable
+
 import numpy as np
 
-def run_neural_network(weights: np.array, input: np.array) -> np.array:
+def run_neural_network(weights: np.array, input: np.array, transfer_function: Callable[np.array, np.array]) -> np.array:
     x = np.copy(input)
     W = weights
     max_iterations = 100
@@ -10,7 +12,7 @@ def run_neural_network(weights: np.array, input: np.array) -> np.array:
         iteration_count += 1
 
         y = W @ x
-        y = 1 / (1 + np.exp(-4.9 * y))
+        y = transfer_function(y)
 
         if np.equal(y, x).all():
             y = x
