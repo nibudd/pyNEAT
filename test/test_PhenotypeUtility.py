@@ -13,7 +13,7 @@ def test_constructWeightsMatrix_1input_1output():
 
     edge_genes = [EdgeGene(node_0, node_1, 1.1, True, 1)]
 
-    genotype = Genotype(edge_genes, node_genes)
+    genotype = Genotype(node_genes, edge_genes)
 
     neural_network = construct_weights_matrix(genotype)
     expected = np.array([[100, 0], [1.1, 0]])
@@ -32,7 +32,7 @@ def test_constructWeightsMatrix_2input_1output():
         EdgeGene(node_1, node_2, 2, True, 0)
     ]
 
-    genotype = Genotype(edge_genes, node_genes)
+    genotype = Genotype(node_genes, edge_genes)
 
     neural_network = construct_weights_matrix(genotype)
     expected = np.array([[100, 0, 0], [0, 100, 0], [1, 2, 0]])
@@ -53,7 +53,7 @@ def test_constructWeightsMatrix_2input_1hidden_1output():
         EdgeGene(hidden_1, output_1, 4, True, 0)
     ]
 
-    genotype = Genotype(edge_genes, node_genes)
+    genotype = Genotype(node_genes, edge_genes)
 
     neural_network = construct_weights_matrix(genotype)
     expected = np.array([[100, 0, 0, 0],
@@ -78,7 +78,7 @@ def test_constructWeightsMatrix_2input_1hidden_1output_1loop():
         EdgeGene(hidden_1, hidden_1, 5, True, 0)
     ]
 
-    genotype = Genotype(edge_genes, node_genes)
+    genotype = Genotype(node_genes, edge_genes)
 
     neural_network = construct_weights_matrix(genotype)
     expected = np.array([[100, 0, 0, 0],
@@ -103,7 +103,7 @@ def test_constructWeightsMatrix_2input_1hidden_1output_1loop_1disabled():
         EdgeGene(hidden_1, hidden_1, 5, True, 0)
     ]
 
-    genotype = Genotype(edge_genes, node_genes)
+    genotype = Genotype(node_genes, edge_genes)
 
     neural_network = construct_weights_matrix(genotype)
     expected = np.array([[100, 0, 0, 0],

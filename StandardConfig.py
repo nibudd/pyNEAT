@@ -15,7 +15,7 @@ min_species_size_to_copy_champion_forward = 6
 # mutation values
 chance_of_weight_mutating = 0.8
 chance_of_weight_perturbing = 0.9 # if not perturbed, weight is assigned new uniform random value
-chance_of_disabled_gene_remaining_disabled = 0.75
+chance_of_enabling_disabled_gene = 0.25
 chance_of_adding_new_node = 0.03
 chance_of_adding_new_edge = 0.05
 
