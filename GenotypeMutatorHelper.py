@@ -14,6 +14,7 @@ class GenotypeMutatorHelper:
         self.node_genes = []
         random.seed()
 
+    #todo: add tests!
     def weight_is_mutating(self) -> bool:
         return random.random() <= self.config.chance_of_weight_mutating
 

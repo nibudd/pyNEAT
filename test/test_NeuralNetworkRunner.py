@@ -1,5 +1,5 @@
 import numpy as np
-from StandardConfig import transfer_function
+from StandardConfig import StandardConfig as config
 from NeuralNetworkRunner import NeuralNetworkRunner
 
 
@@ -12,7 +12,7 @@ def test_returns_correct_output():
 
     input = np.array([[1, 1, 1, 0, 0]]).T
 
-    nn_runner = NeuralNetworkRunner(transfer_function)
+    nn_runner = NeuralNetworkRunner(config.transfer_function)
     result = nn_runner.run(weights, input)
     expected = np.array([[1, 1, 1, 0.97995276, 0.98751554]]).T
 
