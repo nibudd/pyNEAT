@@ -18,6 +18,8 @@ chance_of_weight_perturbing = 0.9 # if not perturbed, weight is assigned new uni
 chance_of_enabling_disabled_gene = 0.25
 chance_of_adding_new_node = 0.03
 chance_of_adding_new_edge = 0.05
+weight_perturbation_limit = 2.5
+weight_reset_limit = 2.5
 
 # mating values
 fraction_of_offspring_from_budding = 0.25

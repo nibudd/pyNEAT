@@ -1,7 +1,7 @@
 import numpy as np
 from Genotype import Genotype
+import NodeGeneFactory
 from NodeGene import NodeGene
-from NodeType import NodeType
 from PhenotypeUtility import construct_weights_matrix, construct_input_vector, extract_output_vector
 from NeuralNetworkRunner import NeuralNetworkRunner
 from StandardConfig import *
@@ -9,10 +9,10 @@ from StandardConfig import *
 
 def get_starting_node_genes() -> list[NodeGene]:
     return [
-        NodeGene(NodeType.BIAS, 0),
-        NodeGene(NodeType.INPUT, 1),
-        NodeGene(NodeType.INPUT, 2),
-        NodeGene(NodeType.OUTPUT, 3)
+        NodeGeneFactory.make_bias(0),
+        NodeGeneFactory.make_input(1),
+        NodeGeneFactory.make_input(2),
+        NodeGeneFactory.make_output(3)
     ]
 
 def evaluate_fitness(genotype: Genotype, nn_runner: NeuralNetworkRunner) -> float:
