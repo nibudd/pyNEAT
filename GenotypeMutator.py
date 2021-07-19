@@ -25,14 +25,14 @@ class GenotypeMutator:
         genotype = deepcopy(genotype)
 
         for edge_gene in genotype.edge_genes:
-            if self.helper.weight_is_mutating():
-                if self.helper.weight_is_perturbing():
-                    edge_gene.weight += self.helper.perturb_weight()
+            if self.helper.weight_is_mutating(random.random()):
+                if self.helper.weight_is_perturbing(random.random()):
+                    edge_gene.weight += self.helper.perturb_weight(random.random())
                 else:
-                    edge_gene.weight = self.helper.reset_weight()
+                    edge_gene.weight = self.helper.reset_weight(random.random())
 
             if not edge_gene.enabled:
-                if self.helper.gene_is_reenabling():
+                if self.helper.gene_is_reenabling(random.random()):
                     edge_gene.enabled = True
 
         return genotype
@@ -41,7 +41,7 @@ class GenotypeMutator:
         genotype = deepcopy(genotype)
 
         for edge_gene in genotype.edge_genes:
-            if self.helper.edge_is_splitting():
+            if self.helper.edge_is_splitting(random.random()):
                 start_node = edge_gene.in_node
                 end_node = edge_gene.out_node
 
@@ -61,7 +61,7 @@ class GenotypeMutator:
         to_nodes = [node_gene for node_gene in genotype.node_genes if not node_gene.is_input() and not node_gene.is_bias()]
 
         for from_node in from_nodes:
-            if self.helper.new_edge_is_being_added():
+            if self.helper.new_edge_is_being_added(random.random()):
                 valid_to_nodes = [node_gene for node_gene in to_nodes if node_gene != from_node]
                 to_node = random.choice(valid_to_nodes)
                 new_edge = self.helper.get_edge_gene_from_nodes(from_node, to_node)

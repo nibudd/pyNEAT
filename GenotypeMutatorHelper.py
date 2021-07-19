@@ -12,28 +12,27 @@ class GenotypeMutatorHelper:
         self.last_gene_id = last_gene_id
         self.edge_genes = []
         self.node_genes = []
-        random.seed()
 
-    def weight_is_mutating(self) -> bool:
-        return random.random() <= self.config.chance_of_weight_mutating
+    def weight_is_mutating(self, rand: float) -> bool:
+        return rand <= self.config.chance_of_weight_mutating
 
-    def weight_is_perturbing(self) -> bool:
-        return random.random() <= self.config.chance_of_weight_perturbing
+    def weight_is_perturbing(self, rand: float) -> bool:
+        return rand <= self.config.chance_of_weight_perturbing
 
-    def gene_is_reenabling(self) -> bool:
-        return random.random() <= self.config.chance_of_enabling_disabled_gene
+    def gene_is_reenabling(self, rand: float) -> bool:
+        return rand <= self.config.chance_of_enabling_disabled_gene
 
-    def edge_is_splitting(self) -> bool:
-        return random.random() <= self.config.chance_of_adding_new_node
+    def edge_is_splitting(self, rand: float) -> bool:
+        return rand <= self.config.chance_of_adding_new_node
 
-    def new_edge_is_being_added(self) -> bool:
-        return random.random() <= self.config.chance_of_adding_new_edge
+    def new_edge_is_being_added(self, rand: float) -> bool:
+        return rand <= self.config.chance_of_adding_new_edge
 
-    def perturb_weight(self) -> float:
-        return random.random() * 2 * self.config.weight_perturbation_limit - self.config.weight_perturbation_limit
+    def perturb_weight(self, rand: float) -> float:
+        return rand * 2 * self.config.weight_perturbation_limit - self.config.weight_perturbation_limit
 
-    def reset_weight(self) -> float:
-        return random.random() * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
+    def reset_weight(self, rand: float) -> float:
+        return rand * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
 
     def get_node_gene_from_edge(self, edge_being_split: EdgeGene) -> NodeGene:
         for node_gene in self.node_genes:

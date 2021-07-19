@@ -1,92 +1,61 @@
-import numpy as np
+import pytest
 
 from GenotypeMutatorHelper import GenotypeMutatorHelper
 from StandardConfig import StandardConfig
 
 
-def test_weightIsMutating_chanceOfWeightMutatingIs1_returnsTrue():
+parametrized_values = [
+    (0, True),
+    (.2, True),
+    (.5, True),
+    (.51, False),
+    (.8, False),
+    (1, False)
+]
+
+@pytest.mark.parametrize("input,expected", parametrized_values)
+def test_weightIsMutating_returnsCorrectValue(input: float, expected: bool):
     config = StandardConfig()
-    config.chance_of_weight_mutating = 1.0
+    config.chance_of_weight_mutating = 0.5
 
     helper = GenotypeMutatorHelper(config, 1)
 
-    assert helper.weight_is_mutating()
+    assert expected == helper.weight_is_mutating(input)
 
-
-def test_weightIsMutating_chanceOfWeightMutatingIs0_returnsFalse():
+@pytest.mark.parametrize("input,expected", parametrized_values)
+def test_weightIsPerturbing_returnsCorrectValue(input: float, expected: bool):
     config = StandardConfig()
-    config.chance_of_weight_mutating = 0.0
+    config.chance_of_weight_perturbing = 0.5
 
     helper = GenotypeMutatorHelper(config, 1)
 
-    assert not helper.weight_is_mutating()
+    assert expected == helper.weight_is_perturbing(input)
 
-def test_weightIsPerturbing_chanceOfWeightPerturbingIs1_returnsTrue():
+@pytest.mark.parametrize("input,expected", parametrized_values)
+def test_geneIsReenabling_returnsCorrectValue(input: float, expected: bool):
     config = StandardConfig()
-    config.chance_of_weight_perturbing = 1.0
+    config.chance_of_enabling_disabled_gene = 0.5
 
     helper = GenotypeMutatorHelper(config, 1)
 
-    assert helper.weight_is_perturbing()
+    assert expected == helper.gene_is_reenabling(input)
 
-
-def test_weightIsPerturbing_chanceOfWeightPerturbingIs0_returnsFalse():
+@pytest.mark.parametrize("input,expected", parametrized_values)
+def test_edgeIsSplitting_returnsCorrectValue(input: float, expected: bool):
     config = StandardConfig()
-    config.chance_of_weight_perturbing = 0.0
+    config.chance_of_adding_new_node = 0.5
 
     helper = GenotypeMutatorHelper(config, 1)
 
-    assert not helper.weight_is_perturbing()
+    assert expected == helper.edge_is_splitting(input)
 
-def test_geneIsReenabling_chanceOfEnablingDisabledGeneIs1_returnsTrue():
+@pytest.mark.parametrize("input,expected", parametrized_values)
+def test_newEdgeIsBeingAdded_returnsCorrectValue(input: float, expected: bool):
     config = StandardConfig()
-    config.chance_of_enabling_disabled_gene = 1.0
+    config.chance_of_adding_new_edge = 0.5
 
     helper = GenotypeMutatorHelper(config, 1)
 
-    assert helper.gene_is_reenabling()
-
-
-def test_geneIsReenabling_chanceOfEnablingDisabledGeneIs0_returnsFalse():
-    config = StandardConfig()
-    config.chance_of_enabling_disabled_gene = 0.0
-
-    helper = GenotypeMutatorHelper(config, 1)
-
-    assert not helper.gene_is_reenabling()
-
-def test_edgeIsSplitting_chanceOfAddingNewNodeIs1_returnsTrue():
-    config = StandardConfig()
-    config.chance_of_adding_new_node = 1.0
-
-    helper = GenotypeMutatorHelper(config, 1)
-
-    assert helper.edge_is_splitting()
-
-
-def test_edgeIsSplitting_chanceOfAddingNewNodeIs0_returnsFalse():
-    config = StandardConfig()
-    config.chance_of_adding_new_node = 0.0
-
-    helper = GenotypeMutatorHelper(config, 1)
-
-    assert not helper.edge_is_splitting()
-
-def test_newEdgeIsBeingAdded_chanceOfAddingNewEdgeIs1_returnsTrue():
-    config = StandardConfig()
-    config.chance_of_adding_new_edge = 1.0
-
-    helper = GenotypeMutatorHelper(config, 1)
-
-    assert helper.new_edge_is_being_added()
-
-
-def test_newEdgeIsBeingAdded_chanceOfAddingNewEdgeIs0_returnsFalse():
-    config = StandardConfig()
-    config.chance_of_adding_new_edge = 0.0
-
-    helper = GenotypeMutatorHelper(config, 1)
-
-    assert not helper.new_edge_is_being_added()
+    assert expected == helper.new_edge_is_being_added(input)
 
 # todo: still need to add tests for perturb_weight() and downward
