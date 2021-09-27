@@ -2,6 +2,7 @@ from collections.abc import Callable
 
 import numpy as np
 
+
 class NeuralNetworkRunner:
 
     def __init__(self, transfer_function: Callable[np.array, np.array]):

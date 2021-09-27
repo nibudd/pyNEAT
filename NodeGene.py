@@ -1,5 +1,6 @@
 from NodeType import NodeType
 
+
 class NodeGene:
 
     def __init__(self, node_type: NodeType, id: int, split_id: int = None):

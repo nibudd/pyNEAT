@@ -5,6 +5,7 @@ from EdgeGene import EdgeGene
 from NodeGene import NodeGene
 from StandardConfig import StandardConfig
 
+
 class GenotypeMutatorHelper:
 
     def __init__(self, config: StandardConfig, last_gene_id: int):
