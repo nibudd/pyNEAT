@@ -1,5 +1,3 @@
-import random
-
 import NodeGeneFactory
 from EdgeGene import EdgeGene
 from NodeGene import NodeGene
@@ -29,6 +27,7 @@ class GenotypeMutatorHelper:
     def new_edge_is_being_added(self, rand: float) -> bool:
         return rand <= self.config.chance_of_adding_new_edge
 
+    #todo: add tests for below methods
     def perturb_weight(self, rand: float) -> float:
         return rand * 2 * self.config.weight_perturbation_limit - self.config.weight_perturbation_limit
 
@@ -40,7 +39,7 @@ class GenotypeMutatorHelper:
             if node_gene.split_id == edge_being_split:
                 return node_gene
 
-        new_node = NodeGeneFactory.make_hidden(self._increment_gene_id(), edge_being_split.id)
+        new_node = NodeGeneFactory.make_hidden(self._increment_gene_id(), edge_being_split.edge_id)
         self.node_genes.append(new_node)
         return new_node
 

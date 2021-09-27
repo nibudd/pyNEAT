@@ -3,9 +3,9 @@ from NodeType import NodeType
 
 class NodeGene:
 
-    def __init__(self, node_type: NodeType, id: int, split_id: int = None):
+    def __init__(self, node_type: NodeType, node_id: int, split_id: int = None):
         self.type = node_type
-        self.id = id
+        self.node_id = node_id
         self.split_id = split_id
 
     def is_bias(self) -> bool:

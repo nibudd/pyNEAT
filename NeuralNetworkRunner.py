@@ -8,8 +8,8 @@ class NeuralNetworkRunner:
     def __init__(self, transfer_function: Callable[np.array, np.array]):
         self.transfer_function = transfer_function
 
-    def run(self, weights: np.array, input: np.array) -> np.array:
-        x = np.copy(input)
+    def run(self, weights: np.array, node_signals: np.array) -> np.array:
+        x = np.copy(node_signals)
         W = weights
         max_iterations = 100
         iteration_count = 0
