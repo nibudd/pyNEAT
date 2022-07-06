@@ -22,10 +22,10 @@ class XorConfiguration(StandardConfig):
     def evaluate_fitness(genotype: Genotype, nn_runner: NeuralNetworkRunner) -> float:
         W = construct_weights_matrix(genotype)
         inputs = [
-            np.array([[0, 0]]).T,
-            np.array([[0, 1]]).T,
-            np.array([[1, 0]]).T,
-            np.array([[1, 1]]).T
+            np.array([[0], [0]]),
+            np.array([[0], [1]]),
+            np.array([[1], [0]]),
+            np.array([[1], [1]])
         ]
         expected_outputs = [
             np.array([[0]]),
