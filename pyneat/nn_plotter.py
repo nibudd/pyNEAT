@@ -11,8 +11,8 @@ class NNPlotter:
     def plot(self):
         nodes = deepcopy(self.nodes)
 
-        node_locations = {
-            node.id: [1, 1]
+        node_points = {
+            node.id: Point(1, 1)
             for node in nodes
         }
 
@@ -24,24 +24,24 @@ class NNPlotter:
             
             for node in layer_nodes:
                 id = node.id
-                node_locations[id][0] += layer
-                x, y = node_locations[id]
+                node_points[id].x += layer
+                x, y = node_points[id].coordinates
                 
                 self._plot_node(ax, id, x, y)
-                self._update_children(node_locations, node)
+                self._update_children(node_points, node)
 
             self._unlink_nodes(layer_nodes)
 
             nodes = [n for n in nodes if n not in layer_nodes]
             layer += 1
 
-        self._plot_edges(node_locations, ax)
+        self._plot_edges(node_points, ax)
                 
         plt.show() 
 
-    def _update_children(self, node_locations, node):
+    def _update_children(self, node_points, node):
         for i, child in enumerate(node.children):
-            node_locations[child.id][1] += i
+            node_points[child.id].y += i
             i += 1
 
     def _plot_node(self, ax, id, x, y):
@@ -53,11 +53,21 @@ class NNPlotter:
             for c in p.children:
                 p.unlink_child(c)
 
-    def _plot_edges(self, node_locations, ax):
+    def _plot_edges(self, node_points, ax):
         nodes = deepcopy(self.nodes)
         for node in nodes:
-            x1, y1 = node_locations[node.id]
+            x1, y1 = node_points[node.id].coordinates
             for child in node.children:
-                x2, y2 = node_locations[child.id]
+                x2, y2 = node_points[child.id].coordinates
                 ax.plot([x1, x2], [y1, y2], "k-")
                 print(x1, y1, x2, y2)
+
+
+class Point:
+    def __init__(self, x: float, y: float):
+        self.x = x
+        self.y = y
+
+    @property
+    def coordinates(self) -> tuple[float, float]:
+        return (self.x, self.y)
