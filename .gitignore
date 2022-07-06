@@ -244,8 +244,8 @@ fabric.properties
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/misc.xml
 /.idea/modules.xml
-/Pipfile
-/Pipfile.lock
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/pyNEAT.iml
 /.idea/vcs.xml
+
+venv*
