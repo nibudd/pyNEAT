@@ -1,5 +1,8 @@
 class Node:
-    def __init__(self, id: int, parents: list['Node']=None, children: list['Node']=None):
+    def __init__(
+        self, id: int, parents: list['Node']=None, 
+        children: list['Node']=None
+    ):
         self.id = id
         self.parents = parents if parents else []
         self.children = children if children else []
