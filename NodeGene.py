@@ -1,18 +1,29 @@
+from abc import ABC, abstractmethod
 from NodeType import NodeType
 
 
-class NodeGene:
+class NodeGene(ABC):
 
-    def __init__(self, node_type: NodeType, node_id: int, split_id: int = None):
-        self.type = node_type
-        self.node_id = node_id
-        self.split_id = split_id
+    def __init__(self, id: int):
+        self.id = id
 
     def is_bias(self) -> bool:
-        return self.type == NodeType.BIAS
+        return False
 
     def is_input(self) -> bool:
-        return self.type == NodeType.INPUT
+        return False
 
     def is_output(self) -> bool:
-        return self.type == NodeType.OUTPUT
+        return False
+
+class BiasNodeGene(NodeGene):
+    def is_bias(self) -> bool:
+        return True
+
+class InputNodeGene(NodeGene):
+    def is_input(self) -> bool:
+        return True
+
+class OutputNodeGene(NodeGene):
+    def is_output(self) -> bool:
+        return True
