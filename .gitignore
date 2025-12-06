@@ -249,3 +249,5 @@ fabric.properties
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/pyNEAT.iml
 /.idea/vcs.xml
+
+Session.vim
