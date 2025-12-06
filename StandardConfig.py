@@ -1,4 +1,4 @@
-import numpy as np
+import math
 
 from NodeGene import NodeGene
 from Genotype import Genotype
@@ -11,7 +11,7 @@ class StandardConfig:
 
     @staticmethod
     def transfer_function(x: float) -> float:
-        return 1 / (1 + np.exp(-4.9 * x))
+        return 1 / (1 + math.exp(-4.9 * x))
 
     # species values
     coefficient_excess = 1.0
