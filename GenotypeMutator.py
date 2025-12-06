@@ -1,20 +1,19 @@
 from copy import deepcopy
 import random
 
+from EdgeGene import EdgeGene
 from Genotype import Genotype
+from NodeGene import NodeGene
 from StandardConfig import StandardConfig
 
 
 class GenotypeMutator:
 
-    def __init__(self, genotype: Genotype, config: StandardConfig):
+    def __init__(self, genotype: Genotype, config: type[StandardConfig]):
         self.genotype = genotype
+        self._sync_ids_from_genotype(genotype)
         self.config = config
         random.seed()
-        self.last_node_id = 0
-        self.last_edge_id = 0
-        self.last_innovation_id = 0
-        self._sync_ids_from_genotype(genotype)
 
     def mutate_genotype(self, genotype: Genotype) -> Genotype:
         genotype = self._mutate_weights(self.genotype)
@@ -94,20 +93,33 @@ class GenotypeMutator:
     def _reset_weight(self, rand: float) -> float:
         return rand * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
 
-    def _get_node_gene_from_edge(self, edge_being_split: EdgeGene) -> NodeGene:
-        for node_gene in self.node_genes:
-            if node_gene.split_id == edge_being_split:
-                return node_gene
+    # def _get_node_gene_from_edge(self, edge_being_split: EdgeGene) -> NodeGene:
+    #     for node_gene in self.genotype.node_genes:
+    #         if node_gene.split_id == edge_being_split:
+    #             return node_gene
+    #
+    #     new_node = NodeGeneFactory.make_hidden(self._increment_gene_id(), edge_being_split.edge_id)
+    #     self.node_genes.append(new_node)
+    #     return new_node
+    #
+    # def _get_edge_gene_from_nodes(self, in_node: NodeGene, out_node: NodeGene, weight: int=1, enabled: bool=True) -> EdgeGene:
+    #     for edge_gene in self.edge_genes:
+    #         if edge_gene.in_node == in_node and edge_gene.out_node == out_node:
+    #             return edge_gene
+    #
+    #     new_edge = EdgeGene(in_node, out_node, weight, enabled, self._increment_gene_id())
+    #     self.edge_genes.append(new_edge)
+    #     return new_edge
 
-        new_node = NodeGeneFactory.make_hidden(self._increment_gene_id(), edge_being_split.edge_id)
-        self.node_genes.append(new_node)
-        return new_node
+    def _sync_ids_from_genotype(self, genotype: Genotype):
+        if genotype.node_genes:
+            self.last_node_id = max(node_gene.id for node_gene in genotype.node_genes)
+        else:
+            self.last_node_id = 0
 
-    def _get_edge_gene_from_nodes(self, in_node: NodeGene, out_node: NodeGene, weight: int=1, enabled: bool=True) -> EdgeGene:
-        for edge_gene in self.edge_genes:
-            if edge_gene.in_node == in_node and edge_gene.out_node == out_node:
-                return edge_gene
-
-        new_edge = EdgeGene(in_node, out_node, weight, enabled, self._increment_gene_id())
-        self.edge_genes.append(new_edge)
-        return new_edge
+        if genotype.edge_genes:
+            self.last_edge_id = max(edge_gene.id for edge_gene in genotype.edge_genes)
+            self.last_innovation_id = max(edge_gene.innovation_id for edge_gene in genotype.edge_genes)
+        else:
+            self.last_edge_id = 0
+            self.last_innovation_id = 0
