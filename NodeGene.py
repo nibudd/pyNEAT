@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from NodeType import NodeType
 
 
 class NodeGene(ABC):
