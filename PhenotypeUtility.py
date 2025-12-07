@@ -1,61 +1,82 @@
-from typing import List
+from collections import deque
+from typing import Callable, List
 import numpy as np
+
 from NodeGene import NodeGene
-from EdgeGene import EdgeGene
 from Genotype import Genotype
 
 
-def construct_weights_matrix(genotype: Genotype) -> np.array:
-    n = _get_number_of_nodes(genotype.node_genes)
-    weights = np.zeros((n, n))
+def evaluate_feedforward(genotype: Genotype, inputs: np.array, transfer_function: Callable) -> np.array:
+    """Single forward pass through a feedforward network."""
+    node_values = _initialize_node_values(genotype, inputs)
+    incoming_edges = _build_incoming_edges_map(genotype)
+    sorted_nodes = _topological_sort(genotype)
 
-    weights = _add_edge_weights(genotype.edge_genes, weights)
-    weights = _add_input_memory(genotype.node_genes, weights)
-
-    return weights
-
-
-def construct_input_vector(node_genes: List[NodeGene], input_vector: np.array) -> np.array:
-    n = _get_number_of_nodes(node_genes)
-    input_ids = [node_gene.node_id for node_gene in node_genes if node_gene.is_input()]
-    bias_ids = [node_gene.node_id for node_gene in node_genes if node_gene.is_bias()]
-
-    nn_input = np.zeros((n, 1))
-    nn_input[input_ids, :] = input_vector
-    nn_input[bias_ids, :] = 1
-
-    return nn_input
-
-
-def extract_output_vector(node_genes: List[NodeGene], output: np.array) -> np.array:
-    output_ids = [node_gene.node_id for node_gene in node_genes if node_gene.is_output()]
-
-    return output[output_ids, :]
-
-
-def _get_number_of_nodes(node_genes: List[NodeGene]) -> int:
-    id_offset_correction = 1 # since node numbers start at 0
-    nodes = node_genes[-1].node_id
-    return nodes + id_offset_correction
-
-
-def _add_edge_weights(edge_genes: List[EdgeGene], weights: np.array) -> np.array:
-    for edge_gene in edge_genes:
-        if not edge_gene.enabled:
+    for node in sorted_nodes:
+        if node.is_input() or node.is_bias():
             continue
 
-        col = edge_gene.in_node.node_id
-        row = edge_gene.out_node.node_id
-        weight = edge_gene.weight
+        weighted_sum = sum(
+            edge.weight * node_values[edge.in_node.id]
+            for edge in incoming_edges[node.id]
+        )
+        node_values[node.id] = transfer_function(weighted_sum)
 
-        weights[row, col] = weight
-
-    return weights
+    return _extract_outputs(genotype, node_values)
 
 
-def _add_input_memory(node_genes: list[NodeGene], weights: np.array) -> np.array:
-    input_gene_ids = [node_gene.node_id for node_gene in node_genes if node_gene.is_input()]
-    for input_gene_id in input_gene_ids:
-        weights[input_gene_id, input_gene_id] = 100
+def _initialize_node_values(genotype: Genotype, inputs: np.array) -> dict:
+    """Set initial values: inputs from array, bias=1, others=0."""
+    node_values = {}
+    input_idx = 0
 
-    return weights
+    for node in genotype.node_genes:
+        if node.is_input():
+            node_values[node.id] = float(inputs[input_idx])
+            input_idx += 1
+        elif node.is_bias():
+            node_values[node.id] = 1.0
+        else:
+            node_values[node.id] = 0.0
+
+    return node_values
+
+
+def _build_incoming_edges_map(genotype: Genotype) -> dict:
+    """Map each node to its incoming enabled edges."""
+    incoming = {node.id: [] for node in genotype.node_genes}
+    for edge in genotype.edge_genes:
+        if edge.enabled:
+            incoming[edge.out_node.id].append(edge)
+    return incoming
+
+
+def _topological_sort(genotype: Genotype) -> List[NodeGene]:
+    """Kahn's algorithm - returns nodes in dependency order."""
+    node_map = {node.id: node for node in genotype.node_genes}
+    in_degree = {node.id: 0 for node in genotype.node_genes}
+    adjacency = {node.id: [] for node in genotype.node_genes}
+
+    for edge in genotype.edge_genes:
+        if edge.enabled:
+            adjacency[edge.in_node.id].append(edge.out_node.id)
+            in_degree[edge.out_node.id] += 1
+
+    queue = deque(node for node in genotype.node_genes if in_degree[node.id] == 0)
+    sorted_nodes = []
+
+    while queue:
+        node = queue.popleft()
+        sorted_nodes.append(node)
+        for neighbor_id in adjacency[node.id]:
+            in_degree[neighbor_id] -= 1
+            if in_degree[neighbor_id] == 0:
+                queue.append(node_map[neighbor_id])
+
+    return sorted_nodes
+
+
+def _extract_outputs(genotype: Genotype, node_values: dict) -> np.array:
+    """Return output node values as column vector."""
+    outputs = [node_values[node.id] for node in genotype.node_genes if node.is_output()]
+    return np.array([outputs]).T

@@ -27,3 +27,6 @@ class InputNodeGene(NodeGene):
 class OutputNodeGene(NodeGene):
     def is_output(self) -> bool:
         return True
+
+class HiddenNodeGene(NodeGene):
+    pass

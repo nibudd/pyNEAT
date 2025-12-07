@@ -28,8 +28,10 @@ pyNEAT implements the NEAT (NeuroEvolution of Augmenting Topologies) algorithm -
 ### Core Flow
 
 ```
-Genotype → PhenotypeUtility → Weights Matrix → NeuralNetworkRunner → Output
+Genotype → PhenotypeUtility.evaluate_feedforward() → Output
 ```
+
+Internally: topological sort → single forward pass through nodes
 
 ### Key Components
 
@@ -43,8 +45,7 @@ Genotype → PhenotypeUtility → Weights Matrix → NeuralNetworkRunner → Out
 - `StandardConfig.py` - Base configuration with mutation rates and abstract methods for problem-specific evaluation
 
 **Network Execution:**
-- `PhenotypeUtility.py` - Converts genotype to executable form (weights matrix, input/output vectors)
-- `NeuralNetworkRunner.py` - Executes network with sigmoid transfer function until convergence
+- `PhenotypeUtility.py` - Evaluates feedforward networks using topological sort and single forward pass
 
 **Problem Configuration:**
 - `XorConfiguration.py` - Example implementation for XOR problem with minimal starting topology (1 bias + 2 inputs + 1 output)
@@ -59,3 +60,8 @@ Genotype → PhenotypeUtility → Weights Matrix → NeuralNetworkRunner → Out
 
 - **Plans**: Store all implementation plans in `ai/plans/` with descriptive filenames
 - **Reference Materials**: NEAT paper and reference implementations are in `ai/`
+
+## Code Style
+
+- **Test names**: Include both context and expected result (e.g., `test_network_with_no_edges_returns_sigmoid_of_zero`)
+- **Docstrings**: Only include when they add important context beyond what the function name conveys

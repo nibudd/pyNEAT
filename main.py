@@ -1,8 +1,6 @@
 from copy import deepcopy
-import numpy as np
+
 from Genotype import Genotype
-from PhenotypeUtility import construct_weights_matrix, construct_input_vector, extract_output_vector
-from NeuralNetworkRunner import NeuralNetworkRunner
 import XorConfiguration as config
 
 

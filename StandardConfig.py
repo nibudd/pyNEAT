@@ -2,7 +2,6 @@ import math
 
 from NodeGene import NodeGene
 from Genotype import Genotype
-from NeuralNetworkRunner import NeuralNetworkRunner
 
 
 class StandardConfig:
@@ -40,5 +39,5 @@ class StandardConfig:
         pass
 
     @staticmethod
-    def evaluate_fitness(genotype: Genotype, nn_runner: NeuralNetworkRunner) -> float:
+    def evaluate_fitness(genotype: Genotype) -> float:
         pass
