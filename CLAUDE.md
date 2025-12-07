@@ -54,3 +54,8 @@ Genotype → PhenotypeUtility → Weights Matrix → NeuralNetworkRunner → Out
 - **Strategy Pattern**: StandardConfig defines algorithm parameters; subclasses implement problem-specific evaluation
 - **Deep Copy for Immutability**: GenotypeMutator copies genotypes before mutation
 - **Template Method**: `mutate_genotype()` orchestrates individual `_mutate_*()` methods
+
+## Project Conventions
+
+- **Plans**: Store all implementation plans in `ai/plans/` with descriptive filenames
+- **Reference Materials**: NEAT paper and reference implementations are in `ai/`
