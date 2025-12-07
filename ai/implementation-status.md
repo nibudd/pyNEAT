@@ -562,3 +562,16 @@ Note: MarIO uses higher structural mutation rates, possibly because Mario requir
 
 **Files to create**: `.pre-commit-config.yaml`
 **Files to modify**: `requirements-dev.txt`, `pyproject.toml`
+
+---
+
+### 11. Should Randomization Be Configurable?
+
+**Purpose**: Assess whether to allow randomizers to be configurable
+
+**Current state**: Randomness is hardcoded in mutation methods.
+
+**Implementation outline**:
+TODO
+
+**Files to modify**: `GenotypeMutator.py`
