@@ -49,7 +49,9 @@ class GenotypeMutator:
 
                 new_node = self._get_node_gene_from_edge(edge_gene)
                 new_start_edge = self._get_edge_gene_from_nodes(start_node, new_node)
-                new_end_edge = self._get_edge_gene_from_nodes(new_node, end_node, edge_gene.weight, edge_gene.enabled)
+                new_end_edge = self._get_edge_gene_from_nodes(
+                    new_node, end_node, edge_gene.weight, edge_gene.enabled
+                )
                 edge_gene.enabled = False
 
                 genotype.node_genes.append(new_node)
@@ -59,12 +61,20 @@ class GenotypeMutator:
 
     def _mutate_new_edge(self, genotype: Genotype) -> Genotype:
         genotype = deepcopy(genotype)
-        from_nodes = [node_gene for node_gene in genotype.node_genes if not node_gene.is_output()]
-        to_nodes = [node_gene for node_gene in genotype.node_genes if not node_gene.is_input() and not node_gene.is_bias()]
+        from_nodes = [
+            node_gene for node_gene in genotype.node_genes if not node_gene.is_output()
+        ]
+        to_nodes = [
+            node_gene
+            for node_gene in genotype.node_genes
+            if not node_gene.is_input() and not node_gene.is_bias()
+        ]
 
         for from_node in from_nodes:
             if self._new_edge_is_being_added(random.random()):
-                valid_to_nodes = [node_gene for node_gene in to_nodes if node_gene != from_node]
+                valid_to_nodes = [
+                    node_gene for node_gene in to_nodes if node_gene != from_node
+                ]
                 to_node = random.choice(valid_to_nodes)
                 new_edge = self._get_edge_gene_from_nodes(from_node, to_node)
 
@@ -88,10 +98,15 @@ class GenotypeMutator:
         return rand <= self.config.chance_of_adding_new_edge
 
     def _perturb_weight(self, rand: float) -> float:
-        return rand * 2 * self.config.weight_perturbation_limit - self.config.weight_perturbation_limit
+        return (
+            rand * 2 * self.config.weight_perturbation_limit
+            - self.config.weight_perturbation_limit
+        )
 
     def _reset_weight(self, rand: float) -> float:
-        return rand * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
+        return (
+            rand * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
+        )
 
     # def _get_node_gene_from_edge(self, edge_being_split: EdgeGene) -> NodeGene:
     #     for node_gene in self.genotype.node_genes:
@@ -119,7 +134,9 @@ class GenotypeMutator:
 
         if genotype.edge_genes:
             self.last_edge_id = max(edge_gene.id for edge_gene in genotype.edge_genes)
-            self.last_innovation_id = max(edge_gene.innovation_id for edge_gene in genotype.edge_genes)
+            self.last_innovation_id = max(
+                edge_gene.innovation_id for edge_gene in genotype.edge_genes
+            )
         else:
             self.last_edge_id = 0
             self.last_innovation_id = 0

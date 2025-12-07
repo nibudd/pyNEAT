@@ -65,3 +65,4 @@ Internally: topological sort → single forward pass through nodes
 
 - **Test names**: Include both context and expected result (e.g., `test_network_with_no_edges_returns_sigmoid_of_zero`)
 - **Docstrings**: Only include when they add important context beyond what the function name conveys
+- always run black on a file after making changes to it

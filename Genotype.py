@@ -9,17 +9,21 @@ class Genotype:
 
     def describe(self) -> str:
         lines = ["Network Connection Table:"]
-        lines.append(f"{'From Node':<12} {'To Node':<12} {'Weight':<10} {'Enabled':<8} {'Innovation ID':<15}")
+        lines.append(
+            f"{'From Node':<12} {'To Node':<12} {'Weight':<10} {'Enabled':<8} {'Innovation ID':<15}"
+        )
         lines.append("-" * 57)
-        
+
         for edge in self.edge_genes:
             from_id = str(edge.in_node.id)
             to_id = str(edge.out_node.id)
             weight = f"{edge.weight:.4f}"
             enabled = "Yes" if edge.enabled else "No"
             innovation_id = str(edge.innovation_id)
-            lines.append(f"{from_id:<12} {to_id:<12} {weight:<10} {enabled:<8} {innovation_id:<15}")
-        
+            lines.append(
+                f"{from_id:<12} {to_id:<12} {weight:<10} {enabled:<8} {innovation_id:<15}"
+            )
+
         return "\n".join(lines)
 
 

@@ -6,7 +6,9 @@ from NodeGene import NodeGene
 from Genotype import Genotype
 
 
-def evaluate_feedforward(genotype: Genotype, inputs: np.array, transfer_function: Callable) -> np.array:
+def evaluate_feedforward(
+    genotype: Genotype, inputs: np.array, transfer_function: Callable
+) -> np.array:
     """Single forward pass through a feedforward network."""
     node_values = _initialize_node_values(genotype, inputs)
     incoming_edges = _build_incoming_edges_map(genotype)
