@@ -22,11 +22,12 @@ Reference materials:
   - [x] ID tracking (`last_node_id`, `last_edge_id`, `last_innovation_id`)
 
 ### Network Execution
-- [x] `PhenotypeUtility.py` - Converts genotype to executable form:
-  - [x] `construct_weights_matrix()` - Build adjacency matrix from edges
-  - [x] `construct_input_vector()` - Encode inputs + bias
-  - [x] `extract_output_vector()` - Decode network outputs
-- [x] `NeuralNetworkRunner.py` - Execute network with sigmoid until convergence
+- [x] `PhenotypeUtility.py` - Evaluates feedforward networks:
+  - [x] `evaluate_feedforward()` - Single forward pass using topological sort
+  - [x] `_topological_sort()` - Kahn's algorithm for node ordering
+  - [x] `_initialize_node_values()` - Set inputs/bias/zeros
+  - [x] `_build_incoming_edges_map()` - Map nodes to incoming edges
+  - [x] `_extract_outputs()` - Return output values
 
 ### Configuration
 - [x] `StandardConfig.py` - Base configuration with mutation rates, abstract methods
@@ -45,31 +46,16 @@ Reference materials:
 | Source File | Test File | Status |
 |-------------|-----------|--------|
 | `GenotypeMutator.py` | `test_sync_ids_from_genotype.py` | **8 active tests** - only covers `_sync_ids_from_genotype()` |
-| `NeuralNetworkRunner.py` | `test_run.py` | **All commented out** |
-| `PhenotypeUtility.py` | `test_construct_input_vector.py` | **All commented out** |
-| `PhenotypeUtility.py` | `test_construct_weights_matrix.py` | **All commented out** |
-| `PhenotypeUtility.py` | `test_extract_output_vector.py` | **All commented out** |
+| `PhenotypeUtility.py` | `test_evaluate_feedforward.py` | **10 active tests** - covers `evaluate_feedforward()` |
 | `EdgeGene.py` | None | No tests |
 | `NodeGene.py` | None | No tests |
 | `Genotype.py` | None | No tests |
-
-**Why tests are commented out**: The old tests used a removed `NodeGeneFactory` class. They need to be rewritten to use the new NodeGene subclasses directly (`InputNodeGene`, `OutputNodeGene`, `BiasNodeGene`, `HiddenNodeGene`).
 
 **Implementation outline**:
 
 #### High Priority (Critical Logic)
 
-1. **Rewrite PhenotypeUtility tests** (`test/ut/PhenotypeUtility/`)
-   - Update imports to use `InputNodeGene`, `OutputNodeGene`, `BiasNodeGene` instead of `NodeGeneFactory`
-   - Fix `test_construct_weights_matrix.py` - 5 commented tests
-   - Fix `test_construct_input_vector.py` - 2 commented tests
-   - Fix `test_extract_output_vector.py` - 1 commented test
-
-2. **Rewrite NeuralNetworkRunner test** (`test/ut/NeuralNetworkRunner/test_run.py`)
-   - Update to use new NodeGene subclasses
-   - Test `run()` method with various network configurations
-
-3. **Add GenotypeMutator mutation tests** (`test/ut/GenotypeMutator/`)
+1. **Add GenotypeMutator mutation tests** (`test/ut/GenotypeMutator/`)
    - `_mutate_weights()` - test weight perturbation and reset
    - `_mutate_new_node()` - test edge splitting, new node creation
    - `_mutate_new_edge()` - test new connection creation
@@ -78,23 +64,17 @@ Reference materials:
 
 #### Medium Priority (Data Classes)
 
-4. **Add NodeGene tests** (`test/ut/NodeGene/`)
+2. **Add NodeGene tests** (`test/ut/NodeGene/`)
    - Test `is_input()`, `is_output()`, `is_bias()` return correct values for each subclass
    - Test that base `NodeGene` returns `False` for all type checks
 
-5. **Add Genotype tests** (`test/ut/Genotype/`)
+3. **Add Genotype tests** (`test/ut/Genotype/`)
    - Test `describe()` method output formatting
 
 #### Low Priority
 
-6. **EdgeGene tests** - Simple data container, optional
-7. **Config tests** - Configuration values, optional
-
-**Files to modify**:
-- `test/ut/PhenotypeUtility/test_construct_weights_matrix.py`
-- `test/ut/PhenotypeUtility/test_construct_input_vector.py`
-- `test/ut/PhenotypeUtility/test_extract_output_vector.py`
-- `test/ut/NeuralNetworkRunner/test_run.py`
+4. **EdgeGene tests** - Simple data container, optional
+5. **Config tests** - Configuration values, optional
 
 **Files to create**:
 - `test/ut/GenotypeMutator/test_mutate_weights.py`
@@ -541,3 +521,44 @@ end
 | Disable inherit | 75% | - | If disabled in either parent |
 
 Note: MarIO uses higher structural mutation rates, possibly because Mario requires more complex networks.
+
+---
+
+## Low Priority Tasks
+
+### 9. Simplify StandardConfig
+
+**Purpose**: Clean up the configuration class structure and naming.
+
+**Current issues**:
+- Name `StandardConfig` is unclear - consider `NeatConfig` or `Config`
+- Mix of class attributes and abstract methods
+- Some parameters may be unused or redundant
+
+**Implementation outline**:
+1. Rename `StandardConfig` to `NeatConfig` or similar
+2. Review and remove unused parameters
+3. Consider using dataclasses or attrs for cleaner structure
+4. Update all references in dependent files
+
+**Files to modify**: `StandardConfig.py`, `XorConfiguration.py`, `main.py`, tests
+
+---
+
+### 10. Set Up Linting with Pre-commit Hooks
+
+**Purpose**: Automatically format and lint code on every change.
+
+**Implementation outline**:
+1. Add `ruff` or `flake8` to `requirements-dev.txt` for linting
+2. Configure linting rules in `pyproject.toml`
+3. Add `pre-commit` to `requirements-dev.txt`
+4. Create `.pre-commit-config.yaml` with:
+   - black (formatting)
+   - ruff or flake8 (linting)
+   - Optional: mypy (type checking)
+5. Run `pre-commit install` to set up hooks
+6. Fix any existing linting errors
+
+**Files to create**: `.pre-commit-config.yaml`
+**Files to modify**: `requirements-dev.txt`, `pyproject.toml`
