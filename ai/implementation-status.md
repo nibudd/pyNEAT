@@ -575,3 +575,10 @@ Note: MarIO uses higher structural mutation rates, possibly because Mario requir
 TODO
 
 **Files to modify**: `GenotypeMutator.py`
+
+---
+
+### 12. Revisit tests
+- are they covering things they should?
+- are they covering things they needn't?
+- are there efficiencies to be had (eg writing builders?)
