@@ -60,9 +60,12 @@ Internally: topological sort → single forward pass through nodes
 
 - **Plans**: Store all implementation plans in `ai/plans/` with descriptive filenames
 - **Reference Materials**: NEAT paper and reference implementations are in `ai/`
+- **Communication Style**: Be concise by default. Expand only when necessary for clarity or when asked.
+- **Task Execution**: Try to batch related tasks to minimize token usage and improve efficiency.
+- **Code Changes**: Ask to change files insted of displaying diffs. The user will review the changes in their environment.
+- **Testing**: Don't run tests yourself, but you can remind the user to run them after changes.
 
 ## Code Style
 
 - **Test names**: Include both context and expected result (e.g., `test_network_with_no_edges_returns_sigmoid_of_zero`)
 - **Docstrings**: Only include when they add important context beyond what the function name conveys
-- always run black on a python file after making changes to it
