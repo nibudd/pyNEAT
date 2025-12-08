@@ -1,6 +1,7 @@
 from copy import deepcopy
 import random
 
+from EdgeGene import EdgeGene
 from Genotype import Genotype
 from InnovationTracker import InnovationTracker
 from NodeGene import NodeGene, HiddenNodeGene
@@ -38,6 +39,8 @@ class GenotypeMutator:
 
     def _mutate_new_node(self, genotype: Genotype) -> Genotype:
         genotype = deepcopy(genotype)
+        new_node_genes: list[HiddenNodeGene] = []
+        new_edge_genes: list[EdgeGene] = []
 
         for edge_gene in genotype.edge_genes:
             if self._edge_is_splitting(random.random()):
@@ -51,8 +54,11 @@ class GenotypeMutator:
                 )
                 edge_gene.enabled = False
 
-                genotype.node_genes.append(new_node)
-                genotype.edge_genes.extend([new_start_edge, new_end_edge])
+                new_node_genes.append(new_node)
+                new_edge_genes.extend([new_start_edge, new_end_edge])
+
+        genotype.node_genes.extend(new_node_genes)
+        genotype.edge_genes.extend(new_edge_genes) 
 
         return genotype
 
