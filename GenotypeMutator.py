@@ -1,26 +1,23 @@
 from copy import deepcopy
 import random
 
-from EdgeGene import EdgeGene
 from Genotype import Genotype
-from NodeGene import NodeGene
+from InnovationTracker import InnovationTracker
+from NodeGene import NodeGene, HiddenNodeGene
 from StandardConfig import StandardConfig
 
 
 class GenotypeMutator:
 
-    def __init__(self, genotype: Genotype, config: type[StandardConfig]):
-        self.genotype = genotype
-        self._sync_ids_from_genotype(genotype)
+    def __init__(self, config: type[StandardConfig], tracker: InnovationTracker):
         self.config = config
-        random.seed()
+        self.tracker = tracker
 
     def mutate_genotype(self, genotype: Genotype) -> Genotype:
-        genotype = self._mutate_weights(self.genotype)
+        genotype = self._mutate_weights(genotype)
         genotype = self._mutate_new_node(genotype)
         genotype = self._mutate_new_edge(genotype)
 
-        self.genotype = genotype
         return genotype
 
     def _mutate_weights(self, genotype: Genotype) -> Genotype:
@@ -47,9 +44,9 @@ class GenotypeMutator:
                 start_node = edge_gene.in_node
                 end_node = edge_gene.out_node
 
-                new_node = self._get_node_gene_from_edge(edge_gene)
-                new_start_edge = self._get_edge_gene_from_nodes(start_node, new_node)
-                new_end_edge = self._get_edge_gene_from_nodes(
+                new_node = self.tracker.get_or_create_node_from_split(edge_gene)
+                new_start_edge = self.tracker.get_or_create_edge(start_node, new_node)
+                new_end_edge = self.tracker.get_or_create_edge(
                     new_node, end_node, edge_gene.weight, edge_gene.enabled
                 )
                 edge_gene.enabled = False
@@ -76,7 +73,7 @@ class GenotypeMutator:
                     node_gene for node_gene in to_nodes if node_gene != from_node
                 ]
                 to_node = random.choice(valid_to_nodes)
-                new_edge = self._get_edge_gene_from_nodes(from_node, to_node)
+                new_edge = self.tracker.get_or_create_edge(from_node, to_node)
 
                 genotype.edge_genes.append(new_edge)
 
@@ -107,36 +104,3 @@ class GenotypeMutator:
         return (
             rand * 2 * self.config.weight_reset_limit - self.config.weight_reset_limit
         )
-
-    # def _get_node_gene_from_edge(self, edge_being_split: EdgeGene) -> NodeGene:
-    #     for node_gene in self.genotype.node_genes:
-    #         if node_gene.split_id == edge_being_split:
-    #             return node_gene
-    #
-    #     new_node = NodeGeneFactory.make_hidden(self._increment_gene_id(), edge_being_split.edge_id)
-    #     self.node_genes.append(new_node)
-    #     return new_node
-    #
-    # def _get_edge_gene_from_nodes(self, in_node: NodeGene, out_node: NodeGene, weight: int=1, enabled: bool=True) -> EdgeGene:
-    #     for edge_gene in self.edge_genes:
-    #         if edge_gene.in_node == in_node and edge_gene.out_node == out_node:
-    #             return edge_gene
-    #
-    #     new_edge = EdgeGene(in_node, out_node, weight, enabled, self._increment_gene_id())
-    #     self.edge_genes.append(new_edge)
-    #     return new_edge
-
-    def _sync_ids_from_genotype(self, genotype: Genotype):
-        if genotype.node_genes:
-            self.last_node_id = max(node_gene.id for node_gene in genotype.node_genes)
-        else:
-            self.last_node_id = 0
-
-        if genotype.edge_genes:
-            self.last_edge_id = max(edge_gene.id for edge_gene in genotype.edge_genes)
-            self.last_innovation_id = max(
-                edge_gene.innovation_id for edge_gene in genotype.edge_genes
-            )
-        else:
-            self.last_edge_id = 0
-            self.last_innovation_id = 0
